@@ -1,0 +1,45 @@
+.greeting{
+  padding: 15px 0;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.action-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  flex: 1;
+  min-width: 150px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-card i {
+  font-size: 2rem;
+  color: #009688;
+  margin-bottom: 15px;
+}
+
+.action-card h4 {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.action-card p {
+  font-size: 0.9rem;
+  color: #64748b;
+}

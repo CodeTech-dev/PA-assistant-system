@@ -1,0 +1,113 @@
+.user {
+  padding: 1rem;
+  background-color: #f8f8fa;
+  height: 100vh;
+}
+
+.user-title {
+  color: #009688;
+  font-size: 40px;
+  height: 20%;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80%;
+}
+
+.form-card {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
+  width: 350px;
+  text-align: center;
+}
+
+.form-card h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #009688;
+  font-size: 24px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus{
+  outline: 1px solid rgba(0, 150, 136, 0.3);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  background-color: #009688;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #00796b;
+}
+
+.cta-link {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #666;
+}
+
+.cta-link a {
+  color: #009688;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.cta-link a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.form-group input.error {
+  border-color: #dc3545;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #009688;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  display: inline;
+  margin-left: 5px;
+}
+
+.link-button:hover {
+  color: #00796b;
+}
+
