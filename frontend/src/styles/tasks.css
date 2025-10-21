@@ -173,10 +173,29 @@ button:disabled {
     border-bottom: 2px solid #eee;
     transition: border-color 0.2s;
 }
+
+.edit-mode-input {
+    font-size: 1em;
+    font-family: inherit;
+    width: 100%; /* Take up the full width of its container */
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fdfdfd;
+    box-sizing: border-box; /* Important for padding */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.edit-mode-input:focus {
+    outline: none;
+    border-color: #28a745; /* Green focus border */
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
 .add-task-form .task-text-input:focus {
     outline: none;
     border-bottom-color: #28a745;
 }
+
 .add-task-form .task-date input,
 .add-task-form .task-date select {
     border: 1px solid #ccc;
