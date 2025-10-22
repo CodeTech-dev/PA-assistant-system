@@ -14,6 +14,7 @@ class Task(models.Model):
     time = models.TimeField(null=True, blank=True)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Medium')
     created_at = models.DateTimeField(auto_now_add=True)
+    completed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"'{self.description}' by {self.owner.username}"

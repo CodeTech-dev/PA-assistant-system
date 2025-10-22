@@ -36,8 +36,6 @@ const TasksView = (props) => {
             <div className="task-list-container">
                 <ul className="task-list">
                     
-                    {/* --- THIS BLOCK IS THE FIX --- */}
-                    {/* It was missing before. This conditionally renders the add task form. */}
                     {props.isAdding && (
                         <li className="task-item add-task-form">
                             <div className="task-item-name">
@@ -52,7 +50,7 @@ const TasksView = (props) => {
                             </div>
                             <div className="task-meta">
                                 <span className="task-date">
-                                    <select 
+                                    <select
                                         value={props.newTaskPriority} 
                                         onChange={(e) => props.setNewTaskPriority(e.target.value)}
                                     >
@@ -84,25 +82,48 @@ const TasksView = (props) => {
                         </li>
                     )}
                     
-                    {/* The rest of the file is the same */}
                     {props.tasks.map(task => (
-                        <li key={task.id} className={`task-item ${task.isSaving ? 'saving' : ''}`}>
+                        <li key={task.id} className={`task-item ${task.isSaving ? 'saving' : ''} ${task.completed ? 'completed' : ''}`}>
                             {props.editingTaskId === task.id ? (
-                                // --- EDITING VIEW ---
                                 <>
                                     <div className="task-item-name">
                                         <input 
+                                            type="checkbox" 
+                                            checked={task.completed || false}
+                                            onChange={() => props.onToggleComplete(task.id)} 
+                                            className="task-checkbox"
+                                        />
+                                        <span className="task-text">{task.description}</span>
+                                    </div>
+                                    <div className="task-item-name">
+                                        <input 
                                             type="text" 
-                                            className="edit-mode-input" 
+                                            className="edit-mode-input"
                                             value={props.editingTaskData.description}
-                                            onChange={(e) => props.setEditingTaskData({
-                                                ...props.editingTaskData, 
-                                                description: e.target.value
-                                            })}
-                                            autoFocus
+                                            onChange={(e) => props.setEditingTaskData({...props.editingTaskData, description: e.target.value})}
                                         />
                                     </div>
                                     <div className="task-meta">
+                                        <span className="task-date">
+                                            <select 
+                                                value={props.editingTaskData.priority} 
+                                                onChange={(e) => props.setEditingTaskData({...props.editingTaskData, priority: e.target.value})}
+                                            >
+                                                <option value="High">High</option>
+                                                <option value="Medium">Medium</option>
+                                                <option value="Low">Low</option>
+                                            </select>
+                                            <input 
+                                                type="date"
+                                                value={props.editingTaskData.date}
+                                                onChange={(e) => props.setEditingTaskData({...props.editingTaskData, date: e.target.value})}
+                                            />
+                                            <input 
+                                                type="time"
+                                                value={props.editingTaskData.time}
+                                                onChange={(e) => props.setEditingTaskData({...props.editingTaskData, time: e.target.value})}
+                                            />
+                                        </span>
                                         <div className="task-list-actions">
                                             <button className="icon-btn save-btn" onClick={() => props.onEditSave(task.id)}>
                                                 <i className="fa fa-check"></i>
@@ -114,7 +135,6 @@ const TasksView = (props) => {
                                     </div>
                                 </>
                             ) : (
-                                // --- DEFAULT READ-ONLY VIEW ---
                                 <>
                                     <div className="task-item-name">
                                         <span className="task-text">{task.description}</span>
