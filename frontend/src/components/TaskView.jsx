@@ -84,17 +84,12 @@ const TasksView = (props) => {
                     
                     {props.tasks.map(task => (
                         <li key={task.id} className={`task-item ${task.isSaving ? 'saving' : ''} ${task.completed ? 'completed' : ''}`}>
-                            {props.editingTaskId === task.id ? (
+                            {props.editingTaskId === task.id ?
+                            (
                                 <>
-                                    <div className="task-item-name">
-                                        <input 
-                                            type="checkbox" 
-                                            checked={task.completed || false}
-                                            onChange={() => props.onToggleComplete(task.id)} 
-                                            className="task-checkbox"
-                                        />
-                                        <span className="task-text">{task.description}</span>
-                                    </div>
+                                    {/* FIX 1: The checkbox and static text span were removed from here.
+                                      This block now only contains the input field for editing.
+                                    */}
                                     <div className="task-item-name">
                                         <input 
                                             type="text" 
@@ -136,7 +131,16 @@ const TasksView = (props) => {
                                 </>
                             ) : (
                                 <>
+                                    {/* FIX 2: The checkbox is now here, in the "normal" view, 
+                                      before the task description span.
+                                    */}
                                     <div className="task-item-name">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={task.completed || false}
+                                            onChange={() => props.onToggleComplete(task.id)} 
+                                            className="task-checkbox"
+                                        />
                                         <span className="task-text">{task.description}</span>
                                     </div>
                                     <div className="task-meta">

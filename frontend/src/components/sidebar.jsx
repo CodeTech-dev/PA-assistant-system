@@ -34,7 +34,7 @@ const Sidebar = () => {
         <li>
           <NavLink to="/appointments">
             <i className="fa fa-calendar-check"></i>
-            <span>Appointments</span>
+            <span>Contacts</span>
           </NavLink>
         </li>
         <li>

@@ -16,4 +16,7 @@ class UserProfile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance, full_name=instance.get_full_name())
+        full_name = instance.get_full_name()
+        if not full_name:
+            full_name = instance.username
+        UserProfile.objects.create(user=instance, full_name=full_name)

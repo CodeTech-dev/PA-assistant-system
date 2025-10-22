@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './main.css';
 
 import Dashboard from './pages/dashboard';
-import Appointments from './pages/appointments';
+import Contacts from './pages/contacts';
 import Calendar from './pages/calendar';
 import Tasks from './pages/tasks';
 import Layout from './components/layout'
@@ -11,36 +11,72 @@ import Layout from './components/layout'
 import Register from './users/Register';
 import Login from './users/Login'
 import Profile from './pages/profile';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
+// --- 1. CREATE A ProtectedRoute COMPONENT ---
+// This component checks if a user is loaded.
+// If not, it redirects to /login.
+const ProtectedRoute = ({ children }) => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>; 
+  }
+
+  if (!user) {
+    // If not loading and no user, redirect to login
+    return <Navigate to="/login" replace />;
+  }
+
+  // If user exists, render the child component (e.g., <Layout><Dashboard /></Layout>)
+  return children;
+};
 
 const App = () => {
     return(
+        <AuthProvider>
         <Router>
             <div className='app'>
                 <Routes>
-                    <Route path='/' element={ <Navigate to="/register" /> }></Route>
+                    {/* --- 2. THESE ARE YOUR PUBLIC ROUTES --- */}
                     <Route path='/register' element={ <Register /> }></Route>
                     <Route path='/login' element={ <Login /> }></Route>
 
-                    {/* Routes with sidebar */}
+                    {/* --- 3. WRAP YOUR LAYOUT ROUTES IN ProtectedRoute --- */}
                     <Route path='/dashboard' element={
-                        <Layout><Dashboard /></Layout> }>
-                    </Route>
+                        <ProtectedRoute>
+                            <Layout><Dashboard /></Layout>
+                        </ProtectedRoute>
+                    } />
                     <Route path='/calendar' element={
-                        <Layout><Calendar /></Layout> }>    
-                    </Route>
+                        <ProtectedRoute>
+                            <Layout><Calendar /></Layout>
+                        </ProtectedRoute>
+                    } />
                     <Route path='/appointments' element={
-                        <Layout><Appointments /> </Layout>}>
-                    </Route>
+                        <ProtectedRoute>
+                            <Layout><Contacts /></Layout>
+                        </ProtectedRoute>
+                    } />
                     <Route path='/tasks' element={
-                        <Layout><Tasks /></Layout>}>   
-                    </Route>
+                        <ProtectedRoute>
+                            <Layout><Tasks /></Layout>
+                        </ProtectedRoute>
+                    } />
                     <Route path='/profile' element={
-                        <Layout><Profile /></Layout>}>   
-                    </Route>        
+                        <ProtectedRoute>
+                            <Layout><Profile /></Layout>
+                        </ProtectedRoute>
+                    } />
+
+                    {/* --- 4. THIS IS YOUR DEFAULT ROUTE --- */}
+                    {/* It will automatically redirect to /dashboard (which will then check auth) */}
+                    <Route path='/' element={ <Navigate to="/dashboard" /> }></Route>
+                    
                 </Routes>
             </div>
         </Router>
+        </AuthProvider>
     )
 }
 

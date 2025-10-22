@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import TasksView from '../components/TaskView';
 import '../styles/tasks.css';
-// Adjust this path to match your project's folder structure
-import { getAccessToken } from '../users/UserAuth'; 
+import { fetchWithAuth, getAccessToken } from '../users/UserAuth'; 
+import { useAuth } from '../context/AuthContext';
 
 const API_BASE_URL = 'http://localhost:8000/api/tasks/';
 
@@ -10,6 +10,7 @@ const TasksContainer = () => {
     const [tasks, setTasks] = useState([]);
     const [isAdding, setIsAdding] = useState(false);
     const [error, setError] = useState(null);
+    const {user} = useAuth()
 
     // State for editing a task
     const [editingTaskId, setEditingTaskId] = useState(null);
@@ -25,17 +26,16 @@ const TasksContainer = () => {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
+                // This check is still good!
                 const token = getAccessToken(); 
                 if (!token) {
                     setError("Not authenticated. Please log in.");
                     return;
                 }
-                const response = await fetch(API_BASE_URL, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
+
+                // FIX: Removed headers object
+                const response = await fetchWithAuth(API_BASE_URL);
+
                 if (!response.ok) throw new Error('Could not fetch tasks.');
                 const data = await response.json();
                 setTasks(data);
@@ -43,8 +43,10 @@ const TasksContainer = () => {
                 setError(err.message);
             }
         };
-        fetchTasks();
-    }, []);
+        if (user){
+            fetchTasks()
+        }
+    }, [user]);
 
     const handleAddTask = async () => {
         if (newTaskDescription.trim() === '') return;
@@ -64,21 +66,20 @@ const TasksContainer = () => {
         setNewTaskTime('');
         setNewTaskPriority('Medium');
         try {
-            const token = getAccessToken();
+            // FIX: Removed 'const token = ...'
             const payload = {
                 description: newTask.description,
                 date: newTaskDate || null,
                 time: newTaskTime || null,
                 priority: newTask.priority,
             };
-            const response = await fetch(API_BASE_URL, {
+
+            // FIX: Removed headers and JSON.stringify
+            const response = await fetchWithAuth(API_BASE_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload),
+                body: payload, // Pass the object directly
             });
+
             if (!response.ok) throw new Error('Failed to save task to the server.');
             const savedTask = await response.json();
             setTasks(prevTasks => 
@@ -96,13 +97,12 @@ const TasksContainer = () => {
         const originalTasks = [...tasks];
         setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
         try {
-            const token = getAccessToken();
-            const response = await fetch(`${API_BASE_URL}${taskId}/`, {
+            // FIX: Removed 'const token = ...'
+            // FIX: Removed headers object
+            const response = await fetchWithAuth(`${API_BASE_URL}${taskId}/`, {
                 method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
             });
+
             if (response.status !== 204 && !response.ok) {
                 throw new Error('Failed to delete the task from the server.');
             }
@@ -135,20 +135,19 @@ const TasksContainer = () => {
         );
         setEditingTaskId(null);
         try {
-            const token = getAccessToken();
+            // FIX: Removed 'const token = ...'
             const payload = {
                 ...editingTaskData,
                 date: editingTaskData.date || null,
                 time: editingTaskData.time || null,
             };
-            const response = await fetch(`${API_BASE_URL}${taskId}/`, {
+
+            // FIX: Removed headers and JSON.stringify
+            const response = await fetchWithAuth(`${API_BASE_URL}${taskId}/`, {
                 method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload)
+                body: payload // Pass the object directly
             });
+
             if (!response.ok) {
                 throw new Error('Failed to update task on the server.');
             }
@@ -164,51 +163,38 @@ const TasksContainer = () => {
         }
     };
     
-    // --- NEW TOGGLE COMPLETE FUNCTION ---
     const handleToggleComplete = async (taskId) => {
         const originalTasks = [...tasks];
-        let updatedTask = null;
+        
+        const taskToUpdate = tasks.find(t => t.id === taskId);
+        if (!taskToUpdate) {
+            setError("Task not found locally.");
+            return;
+        }
+        const updatedTask = { ...taskToUpdate, completed: !taskToUpdate.completed };
 
-        // Optimistically update the UI
         setTasks(prevTasks =>
-            prevTasks.map(task => {
-                if (task.id === taskId) {
-                    // Find the task and flip its 'completed' status
-                    updatedTask = { ...task, completed: !task.completed };
-                    return updatedTask;
-                }
-                return task;
-            })
+            prevTasks.map(task =>
+                task.id === taskId ? updatedTask : task
+            )
         );
-
-        // Send the update to the backend
+        
         try {
-            if (!updatedTask) throw new Error("Task not found locally."); // Safety check
-
-            const token = getAccessToken();
-            // We only need to send the 'completed' field for a PATCH request
-            const payload = { completed: updatedTask.completed }; 
-
-            const response = await fetch(`${API_BASE_URL}${taskId}/`, {
+            const payload = { completed: updatedTask.completed };
+            
+            const response = await fetchWithAuth(`${API_BASE_URL}${taskId}/`, {
                 method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload)
+                body: payload // Pass the object directly
             });
-
+            
             if (!response.ok) {
                 throw new Error('Failed to update task status on the server.');
             }
-            // No need to update state again on success, UI is already updated.
-
         } catch (err) {
             setError(err.message);
-            setTasks(originalTasks); // Rollback on error
+            setTasks(originalTasks);
         }
     };
-
 
     return (
         <TasksView

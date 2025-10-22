@@ -1,17 +1,24 @@
 import React from "react";
 import '../styles/dashboard.css'
-
 import QuickInfo from "../components/Quickinfo";
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
+    const {user, logout} = useAuth()
     return(
         <div className="dashboard">
-            <div className="greeting">
-                <h1>Welcome <span>Alex</span></h1>
+            <div className="dashboard-header">
+                <div className="greeting">
+                    <h1>Welcome <span>{user ? user.full_name : 'User'}</span></h1>
+                </div>
+                <button onClick={logout} className="logout-button">
+                    <i className="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
+      
 
             {/* Quick Actions */}
-            <div class="quick-actions">
+            <div className="quick-actions">
                 {/* <div class="action-card">
                 <i class="fas fa-plus-circle"></i>
                 <h4>Add Appointment</h4>

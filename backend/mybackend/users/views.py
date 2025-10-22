@@ -28,7 +28,6 @@ def login_user(request):
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
         
-        # Find user by email
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -36,7 +35,7 @@ def login_user(request):
                 'error': 'Invalid credentials'
             }, status=status.HTTP_401_UNAUTHORIZED)
         
-        # Authenticate user
+
         user = authenticate(username=user.username, password=password)
         if user is not None:
             login(request, user)
@@ -68,8 +67,17 @@ def get_user_profile(request):
     serializer = UserProfileSerializer(profile)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated]) # This ensures only logged-in users can see it
 def check_auth_status(request):
+    
+
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    if created and not profile.full_name:
+        profile.full_name = request.user.get_full_name() or request.user.username
+        profile.save()
+
     if request.user.is_authenticated:
         return Response({
             'is_authenticated': True,
@@ -77,7 +85,8 @@ def check_auth_status(request):
                 'id': request.user.id,
                 'username': request.user.username,
                 'email': request.user.email,
-                'full_name': request.user.userprofile.full_name
+                'full_name': profile.full_name # Now this is safe to access
             }
         })
-    return Response({'is_authenticated': False})
+    
+    return Response({'is_authenticated': False}, status=status.HTTP_401_UNAUTHORIZED)

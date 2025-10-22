@@ -10,7 +10,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('full_name', 'email', 'password', 'password_confirm')
+        fields = ('full_name','email', 'password', 'password_confirm')
         extra_kwargs = {
             'email': {'required': True},
         }
@@ -26,25 +26,22 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        # Remove password_confirm from validated_data
         validated_data.pop('password_confirm')
         full_name = validated_data.pop('full_name')
-        
-        # Create user
+        email = validated_data['email']
+        username=email
+    
+        # Create user with the new username
         user = User.objects.create(
-            username=validated_data['email'],  # Use email as username
-            email=validated_data['email']
+            username=username, 
+            email=email,
+            first_name=full_name.split(' ')[0], # Save first part as first_name
+            last_name=' '.join(full_name.split(' ')[1:]) # Save rest as last_name
         )
         
         user.set_password(validated_data['password'])
         user.save()
-        
-        # Update or create user profile
-        UserProfile.objects.update_or_create(
-            user=user,
-            defaults={'full_name': full_name}
-        )
-        
+
         return user
 
 class UserLoginSerializer(serializers.Serializer):
