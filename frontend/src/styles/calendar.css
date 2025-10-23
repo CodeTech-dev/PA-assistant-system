@@ -1,5 +1,5 @@
 .calendar-container {
-    max-width: 1100px;
+    max-width: 960px;
     /* margin: 40px auto; */
     padding: 20px;
     background-color: #fff;
@@ -25,6 +25,7 @@
    flex-grow: 1;
    min-height: 0;
 }
+
 
 .calendar-header {
     display: flex;
@@ -78,3 +79,102 @@
 .header-left .cal-button:first-child:hover {
     background-color: #d3d9df;
 }
+
+
+.day-popover {
+    position: absolute; /* Position relative to the page */
+    z-index: 100; /* Ensure it's on top */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 250px; /* Adjust width as needed */
+    font-size: 0.9em;
+    color: #333;
+}
+
+.popover-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #eee;
+    border-top-left-radius: 6px; /* Match parent */
+    border-top-right-radius: 6px; /* Match parent */
+}
+
+.popover-header strong {
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.4em;
+    line-height: 1;
+    cursor: pointer;
+    color: #888;
+    padding: 0 5px;
+}
+.close-btn:hover {
+    color: #000;
+}
+
+.popover-task-list {
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    max-height: 150px; 
+    overflow-y: auto;
+}
+
+.popover-task-item {
+    display: flex;
+    align-items: center;
+    padding: 5px 12px;
+    gap: 8px;
+}
+
+.popover-priority-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.popover-task-time {
+    font-size: 0.85em;
+    color: #666;
+    flex-shrink: 0;
+    min-width: 60px;
+}
+
+.popover-task-title {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.fc-event-main-custom {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 1px 3px;
+    overflow: hidden;
+}
+
+.fc-event-priority-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.fc-event-title-custom {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+

@@ -3,15 +3,15 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './main.css';
 
 import Dashboard from './pages/dashboard';
-import Contacts from './pages/contacts';
 import Calendar from './pages/calendar';
 import Tasks from './pages/tasks';
 import Layout from './components/layout'
 
 import Register from './users/Register';
 import Login from './users/Login'
-import Profile from './pages/profile';
+import Profile from './pages/nottifications';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ContactsContainer from './pages/contacts';
 
 // --- 1. CREATE A ProtectedRoute COMPONENT ---
 // This component checks if a user is loaded.
@@ -53,9 +53,9 @@ const App = () => {
                             <Layout><Calendar /></Layout>
                         </ProtectedRoute>
                     } />
-                    <Route path='/appointments' element={
+                    <Route path='/contacts' element={
                         <ProtectedRoute>
-                            <Layout><Contacts /></Layout>
+                            <Layout><ContactsContainer /></Layout>
                         </ProtectedRoute>
                     } />
                     <Route path='/tasks' element={
@@ -63,7 +63,7 @@ const App = () => {
                             <Layout><Tasks /></Layout>
                         </ProtectedRoute>
                     } />
-                    <Route path='/profile' element={
+                    <Route path='/notifications' element={
                         <ProtectedRoute>
                             <Layout><Profile /></Layout>
                         </ProtectedRoute>

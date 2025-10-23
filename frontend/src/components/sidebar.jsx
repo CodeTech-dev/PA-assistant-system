@@ -32,15 +32,15 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/appointments">
-            <i className="fa fa-calendar-check"></i>
+          <NavLink to="/contacts">
+            <i className="fa-solid fa-address-book"></i>
             <span>Contacts</span>
           </NavLink>
         </li>
         <li>
-          <NavLink to="/profile">
+          <NavLink to="/notifications">
             <i className="fa fa-user"></i>
-            <span>Profile</span>
+            <span>Notifications</span>
           </NavLink>
         </li>
       </ul>
