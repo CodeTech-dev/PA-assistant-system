@@ -74,26 +74,23 @@
 /* --- Mobile View --- */
 @media (max-width: 768px) {
   .dashboard-header {
-    gap: 15px;
-    padding-top: 0;
+  gap: 15px;
+  padding-top: 0;
   }
 
     .logout-button {
-      /* Make the logout button full-width */
-      width: 100%;
-      text-align: center;
+    width: 100%;
+    text-align: center;
     }
 }
 
 /* --- Small Mobile View --- */
 @media (max-width: 400px) {
   .quick-actions {
-    /* On very small screens, make cards stack */
-    flex-direction: column;
+  flex-direction: column;
   }
 
   .action-card {
-      /* Remove min-width so they can go full-width */
-    min-width: auto;
+  min-width: auto;
   }
 }

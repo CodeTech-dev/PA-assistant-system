@@ -7,7 +7,6 @@ const API_TASKS_URL = 'http://localhost:8000/api/tasks/';
 const API_CONTACTS_URL = 'http://localhost:8000/api/contacts/';
 
 const QuickInfo = () => {
-    // --- State for Tasks ---
     const [upcomingTasks, setUpcomingTasks] = useState([]);
     const [tasksLoading, setTasksLoading] = useState(true);
     const [tasksError, setTasksError] = useState(null);

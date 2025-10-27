@@ -1,8 +1,9 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import { toast } from 'react-toastify';
 import { 
     fetchWithAuth, 
     clearAuthTokens as baseClearAuthTokens, 
-    loginUser as baseLoginUser // <-- This is new
+    loginUser as baseLoginUser
 } from '../users/UserAuth';
 
 const AuthContext = createContext(null);
@@ -46,25 +47,28 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const credentials = { email, password };
-            const { success, data, errors } = await baseLoginUser(credentials);
+            const { success, errors } = await baseLoginUser(credentials);
             
             if (success) {
                 // After tokens are saved, load the user's data
                 await loadUser(); 
+                toast.success("Welcome back!");
                 return { success: true }; // <-- This returns 'success' to Login.js
             } else {
+                toast.error("Login failed. Check your credentials.");
                 return { success: false, errors };
             }
         } catch (error) {
+            toast.error("Login failed.");
             return { success: false, errors: { non_field_errors: 'Login failed.' } };
         }
     };
 
-    // 4. THIS IS THE NEW LOGOUT FUNCTION
     const logout = () => {
         baseClearAuthTokens();
         setUser(null);
-        window.location.href = '/login';
+        toast.success("You have been logged out.");
+            // window.location.href = '/login';
     };
 
     if (isLoading) {

@@ -3,6 +3,7 @@ import TasksView from '../components/TaskView';
 import '../styles/tasks.css';
 import { fetchWithAuth, getAccessToken } from '../users/UserAuth'; 
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = 'http://localhost:8000/api/tasks/';
 
@@ -26,14 +27,12 @@ const TasksContainer = () => {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                // This check is still good!
                 const token = getAccessToken(); 
                 if (!token) {
                     setError("Not authenticated. Please log in.");
                     return;
                 }
 
-                // FIX: Removed headers object
                 const response = await fetchWithAuth(API_BASE_URL);
 
                 if (!response.ok) throw new Error('Could not fetch tasks.');
@@ -66,7 +65,6 @@ const TasksContainer = () => {
         setNewTaskTime('');
         setNewTaskPriority('Medium');
         try {
-            // FIX: Removed 'const token = ...'
             const payload = {
                 description: newTask.description,
                 date: newTaskDate || null,
@@ -74,7 +72,6 @@ const TasksContainer = () => {
                 priority: newTask.priority,
             };
 
-            // FIX: Removed headers and JSON.stringify
             const response = await fetchWithAuth(API_BASE_URL, {
                 method: 'POST',
                 body: payload, // Pass the object directly
@@ -87,8 +84,10 @@ const TasksContainer = () => {
                     task.id === tempId ? { ...savedTask, isSaving: false } : task
                 )
             );
+            toast.success("Task added successfully!");
         } catch (err) {
             setError('Failed to save. Please try again.');
+            toast.error("Failed to add task.");
             setTasks(prevTasks => prevTasks.filter(task => task.id !== tempId));
         }
     };
@@ -97,8 +96,6 @@ const TasksContainer = () => {
         const originalTasks = [...tasks];
         setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
         try {
-            // FIX: Removed 'const token = ...'
-            // FIX: Removed headers object
             const response = await fetchWithAuth(`${API_BASE_URL}${taskId}/`, {
                 method: 'DELETE',
             });
@@ -106,8 +103,10 @@ const TasksContainer = () => {
             if (response.status !== 204 && !response.ok) {
                 throw new Error('Failed to delete the task from the server.');
             }
+            toast.success("Task deleted successfully!");
         } catch (err) {
             setError(err.message);
+            toast.error("Failed to delete task.");
             setTasks(originalTasks);
         }
     };
@@ -135,14 +134,12 @@ const TasksContainer = () => {
         );
         setEditingTaskId(null);
         try {
-            // FIX: Removed 'const token = ...'
             const payload = {
                 ...editingTaskData,
                 date: editingTaskData.date || null,
                 time: editingTaskData.time || null,
             };
 
-            // FIX: Removed headers and JSON.stringify
             const response = await fetchWithAuth(`${API_BASE_URL}${taskId}/`, {
                 method: 'PATCH',
                 body: payload // Pass the object directly
@@ -157,8 +154,10 @@ const TasksContainer = () => {
                     task.id === taskId ? updatedTaskFromServer : task
                 )
             );
+            toast.success("Task updated successfully!");
         } catch (err) {
             setError(err.message);
+            toast.error("Failed to update task.");
             setTasks(originalTasks);
         }
     };

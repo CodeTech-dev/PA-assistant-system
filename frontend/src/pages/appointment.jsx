@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Calendar from './calendar'; // Your existing calendar component (will be modified in Step 3)
-import AppointmentForm from '../components/AppointmentForm'; // The component from Step 1
+import Calendar from './calendar';
+import AppointmentForm from '../components/AppointmentForm';
 import { fetchWithAuth } from '../users/UserAuth'; 
 import { useAuth } from '../context/AuthContext'; 
-
+import { toast } from 'react-toastify';
 
 import '../styles/appointment.css'; 
 import '../styles/calendar.css'; 
@@ -115,10 +115,9 @@ const AppointmentPage = () => {
                 }
                 
                 updatedOrNewAppointment = await response.json();
-                
-                // Update the 'events' state by REPLACING the old event
                 const newEvent = transformAppointmentsToEvents([updatedOrNewAppointment])[0];
                 setEvents(events.map(e => e.id === eventId ? newEvent : e));
+                toast.success("Appointment updated successfully!");
 
             } else {
                 // --- CREATE (POST Request) ---
@@ -136,16 +135,16 @@ const AppointmentPage = () => {
                 }
                 
                 updatedOrNewAppointment = await response.json();
-
-                // Add the new event to the 'events' state
                 const newEvent = transformAppointmentsToEvents([updatedOrNewAppointment])[0];
                 setEvents(prevEvents => [...prevEvents, newEvent]);
+                toast.success("Appointment created successfully!");
             }
             setEditingEvent(null);
             setSelectedDate(null);
 
         } catch (err) {
             setError(err.message);
+            toast.error(err.message);
         }
     };
 
@@ -173,9 +172,11 @@ const AppointmentPage = () => {
             setEvents(events.filter(e => e.id !== eventId.toString()));
             setEditingEvent(null);
             setSelectedDate(null);
+            toast.success("Appointment deleted successfully!");
 
         } catch (err) {
             setError(err.message);
+            toast.error(err.message);
         }
     };
 

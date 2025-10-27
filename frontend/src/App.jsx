@@ -2,8 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './main.css';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Dashboard from './pages/dashboard';
-import Calendar from './pages/calendar';
 import Tasks from './pages/tasks';
 import Layout from './components/layout'
 
@@ -76,6 +78,17 @@ const App = () => {
                     <Route path='/' element={ <Navigate to="/dashboard" /> }></Route>
                     
                 </Routes>
+                <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    />
             </div>
         </Router>
         </AuthProvider>

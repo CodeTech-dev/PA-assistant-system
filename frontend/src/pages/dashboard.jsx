@@ -1,6 +1,5 @@
-import React from "react"; // Removed useState, useEffect, useRef for notifications
+import React from "react";
 import '../styles/dashboard.css'
-// Make sure this path is correct for your notification styles
 import '../styles/notification.css' 
 import QuickInfo from "../components/Quickinfo";
 import { useAuth } from "../context/AuthContext";

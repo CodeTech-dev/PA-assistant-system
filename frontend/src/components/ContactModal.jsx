@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import '../styles/contacts.css'; 
 
 const ContactModal = ({ isOpen, onClose, onSave, initialData }) => {
-    // Internal state to manage form fields
     const [formData, setFormData] = useState({
         name: '', email: '', phone: '', company: '', title: ''
     });

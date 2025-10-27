@@ -68,11 +68,6 @@ const Calendar = ({ events, onDateSelect, onEventSelect }) => {
 
     return (
         <div className="calendar-container">
-            {/* --- REMOVED ---
-              * The {error && ...} message is GONE. 
-              * The parent (AppointmentsPage) handles showing the error.
-              */}
-
             <div className="calendar-header">
                 <div className="header-left">
                     <button onClick={goToToday} className="cal-button">Today</button>

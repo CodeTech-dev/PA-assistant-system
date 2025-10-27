@@ -1,4 +1,6 @@
+import { toast } from "react-toastify";
 const API_BASE_URL = 'http://localhost:8000/api/users';
+
 
 // --- Token Utility Functions ---
 
@@ -65,12 +67,15 @@ export const registerUser = async (userData) => {
         const data = await response.json();
 
         if (response.ok) {
+            toast.success("Registration successful! Please log in.");
             return { success: true, data };
         } else {
+            toast.error("Registration failed. Please check your info.");
             return { success: false, errors: data };
         }
     } catch (error) {
         console.error("Registration network error:", error);
+        toast.error("A network error occurred.");
         return { success: false, errors: { non_field_errors: 'Network error. Please try again.' } };
     }
 };
@@ -80,6 +85,7 @@ export const registerUser = async (userData) => {
  * @param {Object} credentials - The user's login credentials (email, password).
  * @returns {Promise<Object>} - A promise that resolves to the response data (including tokens) or rejects with an error object.
  */
+
 export const loginUser = async (credentials) => {
     try {
         const loginData = {
@@ -200,9 +206,6 @@ export const fetchWithAuth = async (url, options = {}) => {
             });
         }
 
-        // --- FIX FOR BUG 1 ---
-        // All 401 requests (the first one and all others) 
-        // will wait here for the refreshPromise to finish.
         try {
             const newAccessToken = await refreshPromise;
 

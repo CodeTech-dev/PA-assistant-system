@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import ContactsView from '../components/ContactsView'; // The UI component
 import ContactModal from '../components/ContactModal'; // The Modal component
 import '../styles/contacts.css';
-import { getAccessToken, fetchWithAuth } from '../users/UserAuth';
+import {fetchWithAuth } from '../users/UserAuth';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 
 const API_CONTACTS_URL = 'http://localhost:8000/api/contacts/';
 
@@ -33,6 +34,7 @@ const ContactsContainer = () => {
                 setContacts(data);
             } catch (err) {
                 setError(err.message);
+                toast.error("Failed to load contacts.");
             } finally {
                 setLoading(false);
             }
@@ -62,6 +64,8 @@ const ContactsContainer = () => {
             ? `${API_CONTACTS_URL}${editingContact.id}/`
             : API_CONTACTS_URL;
         const method = editingContact ? 'PATCH' : 'POST';
+        const actionVerb = method === 'POST' ? 'save' : 'update';
+        const successMessage = `Contact ${actionVerb === 'save' ? 'added' : 'updated'} successfully!`;
 
         // Basic payload preparation
         const payload = {
@@ -89,10 +93,11 @@ const ContactsContainer = () => {
                 // Add: Add the new contact to the list
                 setContacts(prev => [savedContact, ...prev].sort((a,b) => a.name.localeCompare(b.name))); // Add and sort
             }
+            toast.success(successMessage);
             handleCloseModal(); // Close modal on success
         } catch (err) {
             setError(err.message);
-            // Keep modal open on error? Or show error in modal?
+            toast.error(err.message);
         }
     };
 
@@ -107,7 +112,7 @@ const ContactsContainer = () => {
         try {
             const response = await fetchWithAuth(`${API_CONTACTS_URL}${contactId}/`, { method: 'DELETE' });
              if (response.status !== 204 && !response.ok) throw new Error('Failed to delete contact.');
-             // Success: UI already updated
+            toast.success("Contact deleted successfully!");
         } catch (err) {
             setError(err.message);
             setContacts(originalContacts); // Rollback on error

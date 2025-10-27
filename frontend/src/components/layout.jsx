@@ -4,7 +4,6 @@ import Header from './header'; // 2. Import the new Header
 import '../styles/layout.css'
 
 const Layout = ({children}) => {
-    // 3. Add state for the mobile menu
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     // 4. Add the toggle function
