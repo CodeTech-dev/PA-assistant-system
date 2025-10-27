@@ -1,0 +1,36 @@
+.appointments-page-layout {
+    display: flex;
+    flex-direction: row;
+    height: 100vh; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.calendar-column {
+    flex: 2; /* Calendar takes up 3/4 of the width */
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+    min-width: 0; 
+}
+
+.form-column {
+    flex: 1; /* Form takes up 1/4 of the width */
+    box-sizing: border-box;
+    border-left: 1px solid #dee2e6; /* Separator line */
+    background-color: #f8f9fa;
+    /* overflow-y: auto;  */
+    height: 100vh;
+}
+
+/* This is the error message from your original Calendar.js */
+.error-message {
+    padding: 15px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}

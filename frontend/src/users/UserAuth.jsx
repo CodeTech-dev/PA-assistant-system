@@ -125,7 +125,7 @@ export const logoutUser = () => {
 
 // --- Smart Fetch Wrapper ---
 
-let isRefreshing = false; // Prevents multiple refresh attempts
+let refreshPromise = null;
 
 /**
  * A wrapper for 'fetch' that automatically handles
@@ -137,12 +137,9 @@ let isRefreshing = false; // Prevents multiple refresh attempts
 
 export const fetchWithAuth = async (url, options = {}) => {
     
-    // 1. Get the current access token
+    // 1. Get the current access token and set headers
     let token = getAccessToken();
-
-    // 2. Set headers (This version correctly handles plain objects)
     const headers = new Headers(options.headers || {});
-
     if (token) {
         headers.set('Authorization', `Bearer ${token}`);
     }
@@ -153,53 +150,141 @@ export const fetchWithAuth = async (url, options = {}) => {
         options.body = JSON.stringify(options.body);
     }
 
-    // Put the new, guaranteed Headers object back into options
     options.headers = headers;
 
-
-    let response = await fetch(url, options); // <-- Was 'fetchWithAuth'
+    // 3. Make the first request
+    let response = await fetch(url, options);
 
     // 4. Check if the token was expired (401 Unauthorized)
-    if (response.status === 401 && !isRefreshing) {
-        isRefreshing = true;
-        const refreshToken = getRefreshToken();
-
-        if (refreshToken) {
-            try {
-                // 5. Try to get a new access token
-                const refreshResponse = await fetch(`${API_BASE_URL}/token/refresh/`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ refresh: refreshToken })
-                });
-
-                if (!refreshResponse.ok) {
-                    throw new Error('Refresh token was invalid');
-                }
-
-                const newTokens = await refreshResponse.json();
-                
-                // 6. Save the new access token
-                localStorage.setItem('access_token', newTokens.access);
-                isRefreshing = false;
-
-                // 7. Retry the original request with the new token
-                options.headers.set('Authorization', `Bearer ${newTokens.access}`);
-                response = await fetch(url, options); // <-- This is the second call
-
-            } catch (err) {
-                // 8. If refresh fails, log the user out
-                isRefreshing = false;
-                console.error("Failed to refresh token", err);
+    if (response.status === 401) {
+        if (!refreshPromise) {
+            // This is the first request to fail.
+            // Create a new promise to get the token.
+            const refreshToken = getRefreshToken();
+            if (!refreshToken) {
+                // No refresh token, just log out
                 clearAuthTokens(); 
-                throw new Error("Session expired. Please log in again.");
+                throw new Error("Not authenticated. Please log in.");
             }
-        } else {
-            // No refresh token, just log out
-            clearAuthTokens();
-            throw new Error("Not authenticated. Please log in.");
+
+            refreshPromise = new Promise(async (resolve, reject) => {
+                try {
+                    // 5. Try to get a new access token
+                    const refreshResponse = await fetch(`${API_BASE_URL}/token/refresh/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ refresh: refreshToken })
+                    });
+
+                    if (!refreshResponse.ok) {
+                        throw new Error('Refresh token was invalid');
+                    }
+
+                    const newTokens = await refreshResponse.json();
+                    
+                    // --- FIX FOR BUG 2 ---
+                    // Save BOTH new tokens, not just the access token
+                    setAuthTokens(newTokens);
+                    
+                    // Resolve the promise with the new access token
+                    resolve(newTokens.access);
+                } catch (err) {
+                    // 8. If refresh fails, log the user out
+                    console.error("Failed to refresh token", err);
+                    clearAuthTokens(); 
+                    reject(new Error("Session expired. Please log in again."));
+                } finally {
+                    // Reset the promise so new 401s can trigger a new refresh
+                    refreshPromise = null;
+                }
+            });
+        }
+
+        // --- FIX FOR BUG 1 ---
+        // All 401 requests (the first one and all others) 
+        // will wait here for the refreshPromise to finish.
+        try {
+            const newAccessToken = await refreshPromise;
+
+            // 7. Retry the original request with the new token
+            options.headers.set('Authorization', `Bearer ${newAccessToken}`);
+            response = await fetch(url, options); // This is the second call
+
+        } catch (err) {
+            // This happens if the refresh promise itself was rejected
+            throw err;
         }
     }
 
     return response;
 };
+
+
+// export const fetchWithAuth = async (url, options = {}) => {
+    
+//     // 1. Get the current access token
+//     let token = getAccessToken();
+
+//     // 2. Set headers (This version correctly handles plain objects)
+//     const headers = new Headers(options.headers || {});
+
+//     if (token) {
+//         headers.set('Authorization', `Bearer ${token}`);
+//     }
+    
+//     // Automatically stringify body if it's an object
+//     if (options.body && typeof options.body === 'object' && !headers.has('Content-Type')) {
+//         headers.set('Content-Type', 'application/json');
+//         options.body = JSON.stringify(options.body);
+//     }
+
+//     // Put the new, guaranteed Headers object back into options
+//     options.headers = headers;
+
+
+//     let response = await fetch(url, options); // <-- Was 'fetchWithAuth'
+
+//     // 4. Check if the token was expired (401 Unauthorized)
+//     if (response.status === 401 && !isRefreshing) {
+//         isRefreshing = true;
+//         const refreshToken = getRefreshToken();
+
+//         if (refreshToken) {
+//             try {
+//                 // 5. Try to get a new access token
+//                 const refreshResponse = await fetch(`${API_BASE_URL}/token/refresh/`, {
+//                     method: 'POST',
+//                     headers: { 'Content-Type': 'application/json' },
+//                     body: JSON.stringify({ refresh: refreshToken })
+//                 });
+
+//                 if (!refreshResponse.ok) {
+//                     throw new Error('Refresh token was invalid');
+//                 }
+
+//                 const newTokens = await refreshResponse.json();
+                
+//                 // 6. Save the new access token
+//                 localStorage.setItem('access_token', newTokens.access);
+//                 isRefreshing = false;
+
+//                 // 7. Retry the original request with the new token
+//                 options.headers.set('Authorization', `Bearer ${newTokens.access}`);
+//                 response = await fetch(url, options); // <-- This is the second call
+
+//             } catch (err) {
+//                 // 8. If refresh fails, log the user out
+//                 isRefreshing = false;
+//                 console.error("Failed to refresh token", err);
+//                 clearAuthTokens(); 
+//                 throw new Error("Session expired. Please log in again.");
+//             }
+//         } else {
+//             // No refresh token, just log out
+//             clearAuthTokens();
+//             throw new Error("Not authenticated. Please log in.");
+//         }
+//     }
+
+//     return response;
+// };

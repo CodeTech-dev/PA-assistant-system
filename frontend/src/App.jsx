@@ -12,10 +12,9 @@ import Login from './users/Login'
 import Profile from './pages/nottifications';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ContactsContainer from './pages/contacts';
+import AppointmentPage from './pages/appointment';
 
-// --- 1. CREATE A ProtectedRoute COMPONENT ---
-// This component checks if a user is loaded.
-// If not, it redirects to /login.
+
 const ProtectedRoute = ({ children }) => {
   const { user, isLoading } = useAuth();
 
@@ -48,9 +47,14 @@ const App = () => {
                             <Layout><Dashboard /></Layout>
                         </ProtectedRoute>
                     } />
-                    <Route path='/calendar' element={
+                    {/* <Route path='/calendar' element={
                         <ProtectedRoute>
                             <Layout><Calendar /></Layout>
+                        </ProtectedRoute>
+                    } /> */}
+                    <Route path='/appointment' element={
+                        <ProtectedRoute>
+                            <Layout><AppointmentPage /></Layout>
                         </ProtectedRoute>
                     } />
                     <Route path='/contacts' element={
@@ -69,8 +73,6 @@ const App = () => {
                         </ProtectedRoute>
                     } />
 
-                    {/* --- 4. THIS IS YOUR DEFAULT ROUTE --- */}
-                    {/* It will automatically redirect to /dashboard (which will then check auth) */}
                     <Route path='/' element={ <Navigate to="/dashboard" /> }></Route>
                     
                 </Routes>

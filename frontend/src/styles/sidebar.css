@@ -52,3 +52,64 @@
     color: #333;
     background: rgb(255, 212, 59);
 }
+
+/* --- Tablet View (Shrink Sidebar) --- */
+@media (max-width: 768px) {
+    .navigation {
+        width: 78px; /* New shrunk width */
+    }
+
+    .logo {
+        /* Center the icon */
+        display: flex;
+        justify-content: center;
+    }
+    .logo h1 {
+        gap: 0;
+        justify-content: center;
+    }
+    .logo span {
+        /* Hide the logo text */
+        display: none;
+        opacity: 0;
+    }
+
+    .nav-link a {
+        /* Center the icon */
+        justify-content: center;
+    }
+    .nav-link a span {
+        /* Hide the link text */
+        display: none;
+        opacity: 0;
+    }
+}
+
+/* --- Mobile View (Hide Sidebar) --- */
+@media (max-width: 480px) {
+    .navigation {
+        left: -100%; /* Hide off-screen */
+        width: 230px; /* Full width when it slides in */
+        z-index: 1000;
+    }
+
+    /* Make sure text is visible again when sidebar is open on mobile */
+    .navigation .logo {
+        justify-content: flex-start;
+    }
+    .navigation .logo h1 {
+        justify-content: flex-start;
+    }
+    .navigation .logo span {
+        display: inline-block;
+        opacity: 1;
+    }
+
+    .navigation .nav-link a {
+        justify-content: flex-start;
+    }
+    .navigation .nav-link a span {
+        display: inline-block;
+        opacity: 1;
+    }
+}

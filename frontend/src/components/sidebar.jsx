@@ -19,10 +19,16 @@ const Sidebar = () => {
             <span>Dashboard</span>
           </NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink to="/calendar">
             <i className="fa fa-calendar"></i>
             <span>Calendar</span>
+          </NavLink>
+        </li> */}
+        <li>
+          <NavLink to="/appointment">
+            <i className="fa-solid fa-address-book"></i>
+            <span>Appointment</span>
           </NavLink>
         </li>
         <li>
@@ -37,12 +43,12 @@ const Sidebar = () => {
             <span>Contacts</span>
           </NavLink>
         </li>
-        <li>
+        {/* <li>
           <NavLink to="/notifications">
             <i className="fa fa-user"></i>
             <span>Notifications</span>
           </NavLink>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

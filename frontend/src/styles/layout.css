@@ -1,11 +1,65 @@
+/* styles/layout.css */
+
 .app-layout{
     display: flex;
 }
 
 .main-container{
-    /* height: 100vh;
-    background: #009622; */
+    /* ... (your commented-out styles) ... */
     flex: 1 1 0%;
-    margin-left: 250px;
+    margin-left: 250px; /* Default margin [cite: 22] */
     padding: 20px;
+    /* 1. Add transition for margin-left */
+    transition: margin-left 0.3s ease;
+}
+
+/* 2. Add wrapper style */
+.content-wrapper {
+    /* This holds your page content */
+}
+
+/* --- RESPONSIVE STYLES --- */
+
+/* --- Tablet View --- */
+@media (max-width: 768px) {
+    .main-container {
+        margin-left: 78px; /* Match new sidebar width */
+    }
+    .content-wrapper {
+        padding-top: 0; /* Reset padding if header isn't shown */
+    }
+}
+
+/* --- Mobile View --- */
+@media (max-width: 480px) {
+    .main-container {
+        margin-left: 0; /* No margin, sidebar is hidden */
+        padding: 0; /* Remove padding, header will have its own */
+    }
+
+    .content-wrapper {
+        padding: 20px; /* Add padding back to the content area */
+    }
+
+    /* Show the mobile header */
+    .mobile-header {
+        display: flex;
+    }
+
+    /* When mobile menu is active, show the sidebar */
+    .app-layout.mobile-menu-active .navigation {
+        left: 0;
+    }
+
+    /* Optional: Add a dark overlay over the content when menu is open */
+    .app-layout.mobile-menu-active .main-container::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        z-index: 999;
+    }
 }

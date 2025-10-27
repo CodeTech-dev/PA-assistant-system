@@ -47,6 +47,10 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
+.user-name{
+  color: #009688;
+}
+
 .logout-button {
   padding: 10px 15px;
   font-size: 1rem;
@@ -65,4 +69,31 @@
 
 .logout-button i {
   margin-right: 8px;
+}
+
+/* --- Mobile View --- */
+@media (max-width: 768px) {
+  .dashboard-header {
+    gap: 15px;
+    padding-top: 0;
+  }
+
+    .logout-button {
+      /* Make the logout button full-width */
+      width: 100%;
+      text-align: center;
+    }
+}
+
+/* --- Small Mobile View --- */
+@media (max-width: 400px) {
+  .quick-actions {
+    /* On very small screens, make cards stack */
+    flex-direction: column;
+  }
+
+  .action-card {
+      /* Remove min-width so they can go full-width */
+    min-width: auto;
+  }
 }

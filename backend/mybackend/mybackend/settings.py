@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,7 +43,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'tasks',
-    'contacts'
+    'contacts',
+    'appointments'
 ]
 
 MIDDLEWARE = [
@@ -145,3 +147,31 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+# --- Simple JWT (JSON Web Token) Settings ---
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+
+SIMPLE_JWT = {
+    # How long an access token is valid for
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+
+    # How long a refresh token is valid for
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+
+    # --- THIS IS THE CRITICAL FIX ---
+    # This tells Django to send a new refresh token every time you refresh.
+    # This stops your React code from deleting your refresh token.
+    "ROTATE_REFRESH_TOKENS": True,
+
+    # This allows old refresh tokens to be blacklisted
+    "BLACKLIST_AFTER_ROTATION": True,
+
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "JTI_CLAIM": "jti",
+}

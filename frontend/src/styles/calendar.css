@@ -1,13 +1,14 @@
 .calendar-container {
-    max-width: 960px;
+    /* max-width: 960px; */
     /* margin: 40px auto; */
+    width: 100%;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    flex-grow: 1;
 }
 
 /* Basic error message styling */
@@ -26,14 +27,17 @@
    min-height: 0;
 }
 
+.fc .fc-daygrid-day-frame {
+    background-color: #fff;
+}
 
 .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0 20px 0;
+    padding: 10px 0 10px 0;
     border-bottom: 1px solid #eee;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 .calendar-header h2 {
@@ -178,3 +182,56 @@
     flex-grow: 1;
 }
 
+/* --- Tablet View --- */
+@media (max-width: 1024px) {
+    .calendar-container {
+        /* Reduce margin to use space */
+        margin: 20px 0;
+        /* Remove fixed height to allow scrolling */
+        height: auto;
+    }
+}
+
+/* --- Mobile View --- */
+@media (max-width: 768px) {
+    .calendar-container {
+        margin: 0;
+        padding: 15px;
+        height: auto;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .calendar-header {
+        /* Stack the header sections */
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch; /* Make children full-width */
+    }
+    
+    .calendar-header h2 {
+        /* Put title at the top */
+        order: -1;
+        text-align: left;
+        font-size: 1.75rem; /* Match other page titles */
+    }
+
+    .header-left, .header-right {
+        /* Make button groups share space */
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .header-left .cal-button,
+    .header-right .cal-button {
+        /* Make buttons fill the space */
+        flex-grow: 1;
+        text-align: center;
+        padding: 10px 12px; /* Make buttons easier to tap */
+    }
+
+    .fc {
+        flex-grow: 0;
+        min-height: auto;
+    }
+}

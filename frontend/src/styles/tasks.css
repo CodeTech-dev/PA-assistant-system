@@ -24,9 +24,10 @@
 
 .task-header h2 {
     margin: 0;
-    color: #202020;
+    color: #009688;
     font-size: 2.25rem;
     font-weight: 700;
+    transition: font-size 0.3s ease;
 }
 
 .task-app-action {
@@ -233,4 +234,105 @@ button:disabled {
 }
 .save-btn:hover {
     color: #218838;
+}
+
+/* --- Tablet View --- */
+@media (max-width: 1024px) {
+    .task-app {
+        /* Reduce margin to use space */
+        margin: 20px 0;
+    }
+
+    .task-header h2 {
+        /* Scale down title font */
+        font-size: 2rem;
+    }
+
+    /* Make items stack sooner if needed */
+    .task-item {
+        flex-wrap: wrap;
+    }
+}
+
+/* --- Mobile View --- */
+@media (max-width: 768px) {
+    .task-app {
+        /* Remove card-like margin, let it fill the space */
+        margin: 0;
+    }
+
+    .task-header {
+        /* Stack header */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .task-header h2 {
+        /* Further reduce title font */
+        font-size: 1.75rem;
+    }
+
+    .task-app-action {
+        width: 100%;
+    }
+
+    .task-app-action button {
+        /* Make buttons fill space */
+        flex: 1;
+        justify-content: center;
+    }
+
+    /* Stack the main task items */
+    .task-item {
+        gap: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .task-item-name {
+        width: 100%;
+    }
+
+    .task-meta {
+        flex-wrap: wrap;
+    }
+
+    .task-list-actions {
+        /* Always show on mobile */
+        opacity: 1;
+    }
+
+    /* Stack the Add Task Form */
+    .add-task-form .task-item-name {
+        width: 100%;
+    }
+
+    .add-task-form .task-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .add-task-form .task-date {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .add-task-form .task-date input,
+    .add-task-form .task-date select {
+        width: 100%;
+        padding: 8px; /* Make inputs easier to tap */
+    }
+
+    .add-task-form .task-list-actions {
+        width: 100%;
+    }
+    .add-task-form .task-list-actions .icon-btn {
+        flex: 1;
+        padding: 10px;
+        background-color: #f0f0f0;
+    }
 }

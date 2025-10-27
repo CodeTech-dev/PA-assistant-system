@@ -1,0 +1,107 @@
+.new-appointment-container {
+    padding: 20px;
+    background-color: #f8f9fa; /* Light grey background */
+    height: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't break layout */
+    display: flex;
+    flex-direction: column;
+}
+
+.new-appointment-container h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 18px;
+    color: #212529;
+}
+
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; 
+    flex-grow: 1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    box-sizing: border-box; /* Important for padding to work nicely */
+    background-color: #fff;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="date"]:focus,
+.form-group input[type="time"]:focus,
+.form-group textarea:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-group textarea {
+    resize: vertical;
+    font-family: inherit; /* Make textarea use the same font */
+}
+
+.form-buttons {
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-cancel {
+    background-color: #e9ecef;
+    color: #495057;
+}
+.btn-cancel:hover {
+    background-color: #dee2e6;
+}
+
+.btn-save {
+    background-color: #007bff;
+    color: #fff;
+}
+.btn-save:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+    margin-right: auto;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}

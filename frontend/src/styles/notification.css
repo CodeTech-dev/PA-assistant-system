@@ -1,0 +1,306 @@
+/* --- Notification Icon & Dropdown (Header) --- */
+.notification-area {
+    position: relative; /* Context for dropdown positioning */
+    margin-left: 15px; /* Spacing from other header items */
+}
+
+.notification-button {
+    background: none;
+    border: none;
+    color: #555; /* Adjust color to match header icons */
+    font-size: 1.4em; /* Adjust size */
+    cursor: pointer;
+    position: relative; /* Context for badge positioning */
+    padding: 5px;
+    line-height: 1; /* Prevents extra space */
+}
+.notification-button:hover {
+    color: #000;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;      /* Position badge slightly above and to the right */
+    right: -8px;
+    background-color: #e57373; /* Red */
+    color: white;
+    border-radius: 50%; /* Make it circular */
+    width: 18px;    /* Fixed size */
+    height: 18px;
+    font-size: 0.7em; /* Small text */
+    font-weight: bold;
+    display: flex; /* Center the number */
+    justify-content: center;
+    align-items: center;
+    line-height: 1; /* Ensure number fits vertically */
+    border: 1px solid white; /* Optional border */
+    pointer-events: none; /* Badge shouldn't interfere with clicks */
+}
+
+/* Optional: Simple Dot Style */
+/*
+.notification-dot {
+    position: absolute; top: 0px; right: 0px; background-color: #e57373;
+    border-radius: 50%; width: 8px; height: 8px; border: 1px solid white;
+    pointer-events: none;
+}
+*/
+
+.notification-dropdown {
+    position: absolute;
+    top: 100%; /* Position below the button */
+    right: 0;
+    margin-top: 8px; /* Space between button and dropdown */
+    width: 320px; /* Adjust width */
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border: 1px solid #ddd;
+    z-index: 1050; /* Ensure it's above other content */
+    overflow: hidden; /* For border-radius */
+}
+
+.dropdown-header {
+    padding: 10px 15px;
+    font-weight: 600;
+    color: #333;
+    background-color: #f8f9fa; /* Light grey header */
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 300px; /* Limit height and add scroll if needed */
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    position: relative; /* For unread dot */
+    gap: 12px; /* Space between icon and content */
+}
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+.dropdown-item.unread {
+    background-color: #eaf6ff; /* Light blue for unread */
+    font-weight: 500; /* Slightly bolder text */
+}
+.dropdown-item .item-icon {
+    color: #888;
+    font-size: 1.1em;
+    width: 20px; /* Align icons */
+    text-align: center;
+    flex-shrink: 0; /* Prevent icon shrinking */
+}
+.dropdown-item .item-content {
+    flex-grow: 1;
+    min-width: 0; /* Allow shrinking for text ellipsis */
+}
+.dropdown-item .item-text {
+    margin: 0;
+    font-size: 0.9em;
+    color: #444;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ... if text is too long */
+}
+.dropdown-item.unread .item-text {
+     color: #111; /* Darker text for unread */
+}
+.dropdown-item .item-timestamp {
+    font-size: 0.8em;
+    color: #999;
+    margin-top: 2px; /* Small space above timestamp */
+}
+.dropdown-item .unread-dot {
+     position: absolute;
+     right: 10px;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 8px;
+     height: 8px;
+     background-color: #0d6efd; /* Blue */
+     border-radius: 50%;
+}
+.dropdown-empty {
+     padding: 15px;
+     text-align: center;
+     color: #888;
+     font-size: 0.9em;
+}
+.dropdown-footer {
+    padding: 10px 15px;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-top: 1px solid #eee;
+}
+.dropdown-footer a {
+    color: #0d6efd; /* Blue link color */
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+.dropdown-footer a:hover {
+    text-decoration: underline;
+}
+
+/* --- Notifications Page Styles --- */
+.notifications-page {
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 0 8px;
+}
+.notifications-header h2 {
+    margin: 0;
+    color: #202020;
+    font-size: 2.25rem;
+    font-weight: 700;
+}
+.notifications-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+.filter-select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.9em;
+    background-color: white; /* Ensure background */
+}
+.mark-all-btn {
+     /* Style like other action buttons */
+    border: none;
+    border-radius: 6px;
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    color: #fff;
+    background-color: #6c757d; /* Grey */
+}
+.mark-all-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Container for the page list */
+.page-list-container {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+.page-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.page-list-item {
+    display: flex;
+    /* align-items: center; */ /* Align top for multi-line text */
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.page-list li:last-child {
+    border-bottom: none;
+}
+.page-list-item:hover {
+     background-color: #f8f9fa; /* Subtle hover */
+}
+.page-list-item.unread {
+     background-color: #eaf6ff; /* Light blue background for unread */
+     font-weight: 500; /* Slightly bolder */
+}
+.page-list-item.unread:hover {
+     background-color: #dbeffd; /* Slightly darker blue on hover */
+}
+.item-icon-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2px; /* Align icon better */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+.item-icon-area .item-icon {
+     font-size: 1.3em;
+     color: #888;
+     width: 25px;
+     text-align: center;
+     margin-bottom: 5px;
+}
+.unread-dot-large {
+     width: 8px;
+     height: 8px;
+     background-color: #0d6efd; /* Blue */
+     border-radius: 50%;
+}
+.item-content-area {
+    flex-grow: 1;
+    min-width: 0; /* Allow shrinking */
+}
+.item-content-area .item-text {
+    margin: 0 0 5px 0;
+    color: #333;
+    line-height: 1.4;
+}
+.page-list-item.unread .item-text {
+     color: #000; /* Darker text for unread */
+}
+.item-content-area .item-timestamp {
+    font-size: 0.85em;
+    color: #888;
+}
+.item-action-area {
+    margin-left: auto; /* Push actions to the right */
+    padding-left: 15px;
+    flex-shrink: 0;
+    align-self: center; /* Vertically center button */
+}
+.action-link {
+    /* Style like a small button or link */
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
+    background-color: #fff;
+    text-decoration: none;
+    font-size: 0.85em;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.action-link:hover {
+    background-color: #eee;
+    border-color: #bbb;
+}
+.page-list-item.empty {
+    text-align: center;
+    color: #888;
+    cursor: default;
+    padding: 30px;
+}
+.page-list-item.empty:hover {
+    background-color: #fff; /* No hover effect */
+}

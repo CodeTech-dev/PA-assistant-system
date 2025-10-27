@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import '../styles/Quickinfo.css'; // Make sure path is correct
-// Adjust path for auth helpers as needed
+import '../styles/Quickinfo.css';
 import { getAccessToken, fetchWithAuth } from '../users/UserAuth'; 
 import { useAuth } from '../context/AuthContext'; 
 

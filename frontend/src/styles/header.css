@@ -1,0 +1,53 @@
+/* styles/header.css */
+
+.mobile-header {
+    display: none; /* Hidden by default, shown on mobile */
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    /* Add other header styles as needed */
+}
+
+.mobile-header .logo-mobile {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.hamburger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 40px;
+    height: 40px;
+    z-index: 1001; /* Above the sidebar overlay */
+}
+
+.hamburger-btn .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #009688;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* --- Hamburger-to-X Animation --- */
+
+/* 1. Top bar rotates down */
+.hamburger-btn.open .bar:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+/* 2. Middle bar fades out */
+.hamburger-btn.open .bar:nth-child(2) {
+    opacity: 0;
+}
+
+/* 3. Bottom bar rotates up */
+.hamburger-btn.open .bar:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
