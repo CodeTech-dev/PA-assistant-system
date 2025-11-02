@@ -175,3 +175,5 @@ SIMPLE_JWT = {
     "TOKEN_TYPE_CLAIM": "token_type",
     "JTI_CLAIM": "jti",
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

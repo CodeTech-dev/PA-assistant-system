@@ -37,7 +37,7 @@ const Register = () => {
     if (result.success) {
       console.log('Registration successful:', result.data);
       // Navigate to the login page after successful registration
-      navigate('/login');
+      navigate('/check-email');
     } else {
       console.error('Registration failed:', result.errors);
       // Set errors received from the API/service

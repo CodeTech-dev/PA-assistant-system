@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from '../context/AuthContext';
+import { resendActivationEmail } from '../users/UserAuth'; 
+import { toast } from 'react-toastify'; 
 import "./form.css";
 
 const Login = () => {
@@ -14,6 +16,7 @@ const Login = () => {
   });
   const [apiErrors, setApiErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showResend, setShowResend] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,12 +27,16 @@ const Login = () => {
     if (apiErrors[name]) {
       setApiErrors(prevErrors => ({ ...prevErrors, [name]: null }));
     }
+    if (showResend) {
+      setShowResend(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setApiErrors({});
+    setShowResend(false)
 
     // 3. CALL THE CONTEXT's LOGIN FUNCTION
     const result = await login(formData.email, formData.password);
@@ -40,6 +47,16 @@ const Login = () => {
     } else {
       console.error('Login failed:', result.errors);
       const mappedErrors = {};
+      // Check for the general error (from Django's 'error' key)
+      const generalError = result.errors.error || result.errors.detail || result.errors.non_field_errors;
+      
+      if (generalError) {
+        mappedErrors.general = generalError;
+        // --- THIS IS THE NEW LOGIC ---
+        if (generalError.includes('Account not activated')) {
+            setShowResend(true);
+        }
+      }
       if (result.errors.detail) {
         mappedErrors.general = result.errors.detail;
       } else if (result.errors.non_field_errors) {
@@ -52,6 +69,17 @@ const Login = () => {
       setApiErrors(mappedErrors);
     }
     setIsLoading(false);
+  };
+
+const handleResend = async () => {
+    if (!formData.email) {
+        toast.error("Please enter your email address first.");
+        return;
+    }
+    setIsLoading(true);
+    await resendActivationEmail(formData.email);
+    setIsLoading(false);
+    setShowResend(false); // Hide link after click
   };
 
   const toggleRegister = () => {
@@ -68,6 +96,18 @@ const Login = () => {
         <div className="form-card">
           <h2>Login</h2>
           {getGeneralError() && <div className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{getGeneralError()}</div>}
+
+          {showResend && !isLoading && (
+            <p className="cta-link" style={{ marginTop: '-10px', marginBottom: '15px' }}>
+              <a href="#" onClick={(e) => {
+                  e.preventDefault();
+                  handleResend();
+                }}>
+                Resend activation email?
+              </a>
+            </p>
+          )}
+
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <input
@@ -95,6 +135,9 @@ const Login = () => {
               {isLoading ? 'Logging in...' : 'Login'}
             </button>
           </form>
+          <p className="cta-link" style={{ marginTop: '10px' }}>
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </p>
           <p className="cta-link">
             Don't have an account?
             <a href="#" onClick={(e) => {

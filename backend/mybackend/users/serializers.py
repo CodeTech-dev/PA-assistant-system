@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from .models import UserProfile
 
+from .utils import send_activation_email
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(max_length=100, required=True)
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -36,12 +38,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             username=username, 
             email=email,
             first_name=full_name.split(' ')[0], # Save first part as first_name
-            last_name=' '.join(full_name.split(' ')[1:]) # Save rest as last_name
+            last_name=' '.join(full_name.split(' ')[1:]), # Save rest as last_name
+            is_active=False
         )
         
         user.set_password(validated_data['password'])
         user.save()
-
+        send_activation_email(user)
         return user
 
 class UserLoginSerializer(serializers.Serializer):

@@ -15,6 +15,10 @@ import Profile from './pages/nottifications';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ContactsContainer from './pages/contacts';
 import AppointmentPage from './pages/appointment';
+import CheckEmail from './users/CheckMail';
+import ActivateAccount from './users/ActivateAccount';
+import ForgotPassword from './users/ForgotPasword';
+import ResetPasswordConfirm from './users/ResetPasswordConfirm';
 
 
 const ProtectedRoute = ({ children }) => {
@@ -42,6 +46,10 @@ const App = () => {
                     {/* --- 2. THESE ARE YOUR PUBLIC ROUTES --- */}
                     <Route path='/register' element={ <Register /> }></Route>
                     <Route path='/login' element={ <Login /> }></Route>
+                    <Route path="/check-email" element={<CheckEmail />} />
+                    <Route path="/activate/:uidb64/:token" element={<ActivateAccount />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/password-reset-confirm/:uidb64/:token" element={<ResetPasswordConfirm />} />
 
                     {/* --- 3. WRAP YOUR LAYOUT ROUTES IN ProtectedRoute --- */}
                     <Route path='/dashboard' element={

@@ -120,6 +120,88 @@ export const loginUser = async (credentials) => {
 };
 
 /**
+ * Requests a new activation email to be sent.
+ * @param {string} email - The user's email address.
+ * @returns {Promise<Object>}
+ */
+export const resendActivationEmail = async (email) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/resend-activation/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            toast.success(data.message);
+            return { success: true };
+        } else {
+            toast.error(data.error || 'An error occurred.');
+            return { success: false, errors: data };
+        }
+    } catch (error) {
+        console.error("Resend activation network error:", error);
+        toast.error("A network error occurred.");
+        return { success: false, errors: { non_field_errors: 'Network error.' } };
+    }
+};
+
+/**
+ * Requests a password reset email.
+ * @param {string} email - The user's email.
+ */
+export const requestPasswordReset = async (email) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/password-reset-request/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            toast.success(data.message);
+            return { success: true };
+        } else {
+            toast.error(data.error || 'Failed to send request.');
+            return { success: false, errors: data };
+        }
+    } catch (error) {
+        toast.error("A network error occurred.");
+        return { success: false, errors: { non_field_errors: 'Network error.' } };
+    }
+};
+
+// --- ADD THIS FUNCTION ---
+/**
+ * Confirms a new password using the token.
+ * @param {Object} data - { uidb64, token, password, password_confirm }
+ */
+export const confirmPasswordReset = async (resetData) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/password-reset-confirm/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(resetData),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            toast.success(data.message);
+            return { success: true };
+        } else {
+            toast.error(data.error || 'Failed to reset password.');
+            return { success: false, errors: data };
+        }
+    } catch (error) {
+        toast.error("A network error occurred.");
+        return { success: false, errors: { non_field_errors: 'Network error.' } };
+    }
+};
+
+/**
  * Logs out the user by clearing tokens.
  */
 export const logoutUser = () => {
